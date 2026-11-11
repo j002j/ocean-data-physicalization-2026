@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Central Meter & Multi-Nozzle (Fixed)</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <style>
+    body { 
+      font-family: 'Helvetica Neue', Arial, sans-serif; 
+      background: #111; color: #fff; 
+      display: flex; flex-direction: column; align-items: center; 
+      margin: 0; padding: 20px; 
+    }
+    h2 { color: #00aaff; margin-bottom: 5px; letter-spacing: 2px; }
+    p { color: #888; font-size: 0.9em; margin-top: 0; }
+    
+    #digital-year { 
+      font-family: 'Courier New', Courier, monospace; 
+      font-size: 4em; font-weight: bold; 
+      color: #ff3333; background: #0a0a0a; 
+      padding: 10px 40px; border: 4px solid #222; border-radius: 8px; 
+      margin-bottom: 20px; letter-spacing: 5px; 
+      box-shadow: 0 0 20px rgba(255, 51, 51, 0.4), inset 0 0 10px rgba(0,0,0,0.8); 
+    }
+    
+    #canvas-container { 
+      width: 800px;
+      height: 800px;
+      background-color: #1a2639; /* 画像がない場合の深海カラー */
+      
+      /* ★ここで同じフォルダにある map.png を読み込みます★ */
+      background-image: url('map.png'); 
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      
+      box-shadow: 0 15px 40px rgba(0,0,0,0.9); 
+      border-radius: 12px; 
+      border: 2px solid #333; 
+      position: relative;
+    }
+    
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>DATA PHYSICALIZATION: PLASTIC OCEAN</h2>
+  <p>ノズルの上でスクロール（ゆっくり）するか、クリックしてください</p>
+  
+  <div id="digital-year">2014</div>
+  <div id="canvas-container"></div>
+
+  <script>
+    const regions = [
+      { name: "日本海北部", x: 530, y: 300, max: 14.151, data: [4.162, 3.704, 6.239, 0.786, 2.052, 5.744, 1.06, 14.151, 10.502, 0.537] },
+      { name: "日本海西部", x: 280, y: 450, max: 35.476, data: [35.476, 0.84, 1.642, 1.01, 13.282, 2.312, 1.812, 1.311, 0.811, 0.384] },
+      { name: "東シナ海",   x: 150, y: 650, max: 1.461,  data: [1.461, 0.997, 0.534, 0.503, 0.693, 1.367, 0.594, 0.515, 0.435, 0.65] },
+      { name: "太平洋南部", x: 380, y: 550, max: 26.114, data: [26.114, 1.1, 0.173, 1.102, 5.264, 1.89, 0.395, 0.474, 0.554, 0.442] },
+      { name: "太平洋中部", x: 500, y: 480, max: 3.495,  data: [0.472, 1.598, 1.058, 1.1, 3.495, 1.546, 0.628, 0.07, 0.222, 0.222] },
+      { name: "太平洋北部", x: 650, y: 250, max: 12.505, data: [1.583, 11.393, 12.505, 0.851, 3.121, 3.489, 0.641, 0.465, 0.289, 0.151] },
+      { name: "小笠原周辺", x: 600, y: 700, max: 0.435,  data: [0.056, 0.056, 0.056, 0.096, 0.321, 0.435, 0.076, 0.003, 0.003, 0.003] }
+    ];
+
+    let globalYearIndex = 0; 
+    let activeRegion = 0;    
+    
+    // ★感度調整用変数（クールダウン用）
+    let lastScrollTime = 0;
+    const scrollCooldown = 400; // ミリ秒 (0.4秒に1回しか反応しない)
+
+    function setup() {
+      let canvas = createCanvas(800, 800);
+      canvas.parent('canvas-container');
+      angleMode(DEGREES);
+    }
+
+    function draw() {
+      clear(); // 背景の画像(map.png)を透かすために透明にする
+      
+      // 暗い海の雰囲気を出すための半透明レイヤー
+      fill(15, 25, 35, 100);
+      noStroke();
+      rect(0, 0, width, height);
+
+      // --- ノズルの描画 ---
+      for (let i = 0; i < regions.length; i++) {
+        let r = regions[i];
+        let isActive = (i === activeRegion);
+        
+        push();
+        translate(r.x, r.y);
+        
+        if (isActive) {
+          fill(0, 180, 255, 40); noStroke();
+          circle(0, 0, 70);
+          stroke(0, 180, 255); strokeWeight(3);
+        } else {
+          stroke(60); strokeWeight(2);
+        }
+        
+        fill(isActive ? 70 : 40); circle(0, 0, 35);
+        fill(isActive ? 100 : 30); noStroke(); circle(0, 0, 15);
+        
+        let dialAngle = map(globalYearIndex, 0, 9, -135, 135);
+        stroke(isActive ? 255 : 100); strokeWeight(isActive ? 3 : 2);
+        line(0, 0, cos(dialAngle)*15, sin(dialAngle)*15);
+
+        // テキストの影と本体
+        fill(0); noStroke(); textAlign(CENTER); textSize(13); textStyle(BOLD);
+        text(r.name, 2, -28); 
+        fill(isActive ? 255 : 150); text(r.name, 0, -30);
+        pop();
+      }
+
+      // --- セントラルメーターの描画 ---
+      push();
+      translate(220, 200); 
+      let r = regions[activeRegion];
+      let currentData = r.data[globalYearIndex];
+      let motorAngle = map(currentData, 0, r.max, 0, 180);
+
+      fill(20, 20, 20, 220); stroke(180, 140, 80); strokeWeight(6);
+      arc(0, 0, 220, 220, 180, 360);
+      
+      stroke(120); strokeWeight(2);
+      for(let i = 0; i <= 180; i += 15) {
+        let len = (i % 45 === 0) ? 100 : 105;
+        line(cos(180+i)*len, sin(180+i)*len, cos(180+i)*110, sin(180+i)*110);
+      }
+
+      rotate(180 + motorAngle);
+      stroke(255, 60, 60); strokeWeight(4); line(0, 0, 95, 0);
+      fill(180, 140, 80); noStroke(); circle(0, 0, 18);
+      fill(40); circle(0, 0, 8);
+      pop();
+
+      // --- メーターテキスト ---
+      push();
+      translate(220, 220); textAlign(CENTER);
+      fill(180, 140, 80); noStroke(); textSize(14); textStyle(BOLD); letterSpacing = 2;
+      text("CENTRAL DATA METER", 0, 0);
+      textSize(15); fill(0, 180, 255); text("LINKED: " + r.name, 0, 25);
+      textSize(16); fill(255, 60, 60); text(`MP DENSITY: ${currentData.toFixed(3)}`, 0, 50);
+      pop();
+    }
+
+    // ★修正版：マウススクロール操作（クールダウン制御付き）
+    function mouseWheel(event) {
+      for (let i = 0; i < regions.length; i++) {
+        // 当たり判定を少し広く(半径40px)
+        if (dist(mouseX, mouseY, regions[i].x, regions[i].y) < 40) { 
+          activeRegion = i; 
+          
+          // 現在の時間を取得
+          let currentTime = millis();
+          
+          // 前回のスクロールから指定時間(400ms)経過しているか判定
+          if (currentTime - lastScrollTime > scrollCooldown) {
+            if (event.delta > 0) globalYearIndex++;
+            else globalYearIndex--;
+            
+            globalYearIndex = constrain(globalYearIndex, 0, 9);
+            document.getElementById('digital-year').innerText = 2014 + globalYearIndex;
+            
+            // スクロールした時間を記録
+            lastScrollTime = currentTime;
+          }
+          return false; // 画面全体のスクロールを防ぐ
+        }
+      }
+    }
+    
+    // クリックでも切り替え可能
+    function mousePressed() {
+      for (let i = 0; i < regions.length; i++) {
+        if (dist(mouseX, mouseY, regions[i].x, regions[i].y) < 40) {
+          activeRegion = i;
+          document.getElementById('digital-year').innerText = 2014 + globalYearIndex;
+        }
+      }
+    }
+  </script>
+</body>
+</html>
