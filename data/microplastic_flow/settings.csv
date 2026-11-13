@@ -1,0 +1,8 @@
+key,value,説明,description
+show_mode,2,0=年ごとに再生 / 1=シリアルで年を指定 / 2=2つの年を比較,0=play through years / 1=select year via serial / 2=compare two years
+compare_from_year,2017,show_mode=2 のとき：比較のもとになる年,When show_mode=2: base year of the comparison
+compare_to_year,2018,show_mode=2 のとき：比較する年,When show_mode=2: year to compare
+show_ms,10000,show_mode=2 のとき：ボタンを押してから光り続ける時間(ms),When show_mode=2: how long the light runs after a press (ms)
+trend_mode,0,show_mode=0/1 のとき：0=前年と比較 / 1=base_yearと比較,When show_mode=0/1: 0=compare with previous year / 1=compare with base_year
+base_year,2017,trend_mode=1 のときの基準年,Base year when trend_mode=1
+year_step_ms,1500,show_mode=0 のとき：1年あたりの表示時間(ms),When show_mode=0: display time per year (ms)
