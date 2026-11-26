@@ -50,7 +50,8 @@ Um diese Data Story interaktiv und erlebbar zu machen, verbinden wir Data Scienc
 ## 📊 3. Welche Daten & Regionen nutzen wir?
 Dataset: https://aomi.env.go.jp/Map?map=gmap_survey_point
 
-[image_data.pdf](https://github.com/user-attachments/files/35444826/image_data.pdf)
+<img width="841" height="595" alt="image_data" src="https://github.com/user-attachments/assets/df3df8d4-bcb3-44ba-8ba2-e2cc76d4eb7a" />
+Full data for the source. We only used zones from Seas surrounding Japan.
 
 * **Datenquelle:** Das offizielle **AOMI-Portal** des japanischen Umweltministeriums (Rohdaten-CSV mit Tausenden von Messpunkten zu Partikeldichten $d < 5\,\text{mm}$ pro $\text{m}^3$).
 * **Zeitraum:** 2014 bis 2023 (im Projekt liegt der Fokus auf Veränderungen seit 2017).
