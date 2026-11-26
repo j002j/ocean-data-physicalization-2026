@@ -27,6 +27,10 @@ Dataset: https://aomi.env.go.jp/Map?map=gmap_survey_point
 <img width="4000" height="3000" alt="prototype_2_mircroplastics_japan_muros_2026" src="https://github.com/user-attachments/assets/35fffb68-1dc6-4aa1-9c06-fd7277dd8b96" />
 Prototype image without the LED illuminated.
 
+
+<img width="1024" height="768" alt="AI_mockup_portotype" src="https://github.com/user-attachments/assets/5e2580df-4dc8-4347-b851-9b14801c85d4" />
+AI portotype Mockup with all LED glowing symbolically. For the final version a specific amount of LEDs should light up based on the data (microplastic concentration of the selected area). White indicating the baseline 2017, orange indicating an increase compared to 2017, blue indicating a decrease compared to 2017.
+
 ---
 
 ## 📖 1. Die Data Story: Worum geht es?
