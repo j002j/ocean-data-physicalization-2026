@@ -25,7 +25,7 @@ Dataset: https://aomi.env.go.jp/Map?map=gmap_survey_point
 | Buttons + lights or illuminated buttons | Melted plastic straws | |
 
 <img width="4000" height="3000" alt="prototype_2_mircroplastics_japan_muros_2026" src="https://github.com/user-attachments/assets/35fffb68-1dc6-4aa1-9c06-fd7277dd8b96" />
-
+Prototype image without the LED illuminated.
 
 ---
 
@@ -46,11 +46,11 @@ Um diese Data Story interaktiv und erlebbar zu machen, verbinden wir Data Scienc
 2. **Die Visualisierung (Arduino & LEDs):** Drückt man auf eine Region, leuchtet daneben eine dynamische LED-Skala auf, die den Trend und den Belastungsgrad im Vergleich zum Basisjahr 2017 visuell darstellt.
 
 ---
-[image_data.pdf](https://github.com/user-attachments/files/35444726/image_data.pdf)
-
 
 ## 📊 3. Welche Daten & Regionen nutzen wir?
 Dataset: https://aomi.env.go.jp/Map?map=gmap_survey_point
+
+[image_data.pdf](https://github.com/user-attachments/files/35444826/image_data.pdf)
 
 * **Datenquelle:** Das offizielle **AOMI-Portal** des japanischen Umweltministeriums (Rohdaten-CSV mit Tausenden von Messpunkten zu Partikeldichten $d < 5\,\text{mm}$ pro $\text{m}^3$).
 * **Zeitraum:** 2014 bis 2023 (im Projekt liegt der Fokus auf Veränderungen seit 2017).
@@ -63,8 +63,7 @@ Dataset: https://aomi.env.go.jp/Map?map=gmap_survey_point
   * *(Hinweis: Zone 5 Ogasawara wurde wegen zu vieler fehlender Messwerte als reine Kontrollzone für diese Hauptanalyse weggelassen).*
  
   <img width="3000" height="1350" alt="02_vergleich_gegenueber_2017" src="https://github.com/user-attachments/assets/562257e8-7948-4f34-a188-7eca9d48ca95" />
-
-
+This plot shows the change in micro-plastic density in selected Japanese Regions comparing 2023 with 2017 (in %).
 ---
 
 ## 🧠 4. Gründe für unsere methodischen Entscheidungen
